@@ -8,11 +8,25 @@ db = mysql.connector.connect(
     host="localhost",
     user="root",
     password="root^^^",
-    database="" # must enter database name here
+    database="contact_book_db"
 )
 
 # cursor instance
 cursor = db.cursor()
+
+try:
+    # creating the database if it doesn't exit
+    cursor.execute("CREATE DATABASE IF NOT EXISTS contact_book_db")
+    print('database created successfully')
+except:
+    print('database not found')
+
+try:
+    # creatig the database 
+    cursor.execute("CREATE TABLE IF NOT EXISTS tbl_contacts (id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(250), address VARCHAR(250), phone VARCHAR(15), email VARCHAR(250))")
+    print('table created successfully')
+except:
+    print('failed to create table')
 
 # add new contact function
 def addNewContact():
@@ -27,8 +41,16 @@ def addNewContact():
     phoneNumber = str(input('Please enter the phone number: '))
     email = input('Please enter the email: ')
 
-    print('{} {} {} {}'.format(name, address, phoneNumber, email))
-    print('data saved')
+    # insertion query
+    query = "INSERT INTO tbl_contacts (name, address, phone, email) VALUES (%s, %s, %s, %s)"
+    # storing the user inputed data to an object
+    contactDetails = (name, address, phoneNumber, email) 
+
+    # executing the query
+    cursor.execute(query, contactDetails)
+    db.commit() # commiting the changes
+
+    print('***New Contact Data Saved***')
     print('\t-------------------------------------------------')
 
 # view all contact function
@@ -37,6 +59,17 @@ def viewAllContacts():
     print('\t-------------------------------------------------')
 
     print('\n\t\tALL CONTACTS')
+    
+    # fetching query
+    cursor.execute("SELECT * FROM tbl_contacts")
+
+    # storing the result in an object
+    results = cursor.fetchall()
+
+    # looping through the result and display them
+    for result in results:
+        print(result)
+
     print('\t-------------------------------------------------')
 
 
@@ -55,7 +88,7 @@ def findAContact():
 # user menu function
 def menu():
     ''' THIS FUNCTION RETRUNS THE USER MENU '''
-    print('\n\t\tWELCOME TO CONTACT BOOK')
+    print('\n\t\tWELCOME TO CONTACT BOOK CLI APP')
 
     # request for user input
     userMenuChoice = input(
@@ -84,7 +117,6 @@ def menu():
         menu()
     
 
-
-# main 
+# # main 
 if __name__=="__main__":
     menu()

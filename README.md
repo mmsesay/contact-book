@@ -44,7 +44,7 @@ Below are the tools you need to have in order to execute this program:
 3. MySQL Workbench (optional)
 - visit-> https://dev.mysql.com/downloads/workbench/
 - scroll down, choose your OS type and click on the download 
-Note: This a graphical tool for viewing your databases and making modifications to it etc.
+    Note: This a graphical tool for viewing your databases and making modifications to it etc.
 
 4. MySQL Connector for Python
 - run the folllowing command ```pip install mysql-connector-python```
